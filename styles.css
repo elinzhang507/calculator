@@ -18,6 +18,10 @@
     border: solid 2px black;
     margin: 20px 20px 10px;
     height: 100px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-size: 24px;
 }
 
 #button-container {
@@ -38,6 +42,6 @@
     font-size: 24px; 
 }
 
-#eq-buttons {
+#eq-button {
     flex: 2 2 calc(50% - 15px);
 }
