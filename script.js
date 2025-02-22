@@ -85,6 +85,7 @@ opButtonContainer.forEach(button => button.addEventListener("click", () => {
         display(0);
     } else if (b === "0" || a === "0" && b === "0") {
         handleSnarkyMessage();
+        dotButton.disabled = true;
         return;
     }
     else if (isEqualClicked && ans !== '' && ans !== undefined && !isNaN(+ans)) {
@@ -107,7 +108,6 @@ opButtonContainer.forEach(button => button.addEventListener("click", () => {
 let eqButton = document.querySelector("#eq-button");
 eqButton.addEventListener("click", () => {
     if(a === '' && b === '') {
-        acButton.click();
         return;
     }
 
@@ -117,20 +117,23 @@ eqButton.addEventListener("click", () => {
     if(!isOperatorClicked) {
         display(a);
         ans = a;
+        dotButton.disabled = false;
     } else if (b === "0" || a === "0" && b === "0") {
         handleSnarkyMessage();
+        dotButton.disabled = true;
     } else if (isNaN(ans) || ans === undefined || b === '') {
         acButton.click();
         screen.replaceChildren();
         display("Error");
+        dotButton.disabled = false;
     } else {
         display(ans);
+        dotButton.disabled = false;
     }
 
     isOperatorClicked = false;
     isScreenCleared = false;
     isEqualClicked = true;
-    dotButton.disabled = false;
     a = '';
     b = '';
     operator = '';
@@ -195,4 +198,33 @@ ansButton.addEventListener("click", () => {
     } else if (+num === +ans) {
         ans = percentNum;
     }
+})
+
+document.addEventListener("keydown", (event) => {
+    let key = event.key;
+    let code = event.code;
+    if(isFinite(key)){
+        console.log(`num-${key}`)
+        document.querySelector(`#num-${key}`).click();
+    } else if (key === "+") {
+        document.querySelector("#add").click();
+    } else if (key === "-") {
+        document.querySelector("#subtract").click();
+    } else if (key === "*") {
+        document.querySelector("#multiply").click();
+    } else if (key === "/") {
+        document.querySelector("#divide").click();
+    } else if (key === "=" || key === "Enter") {
+        document.querySelector("#eq-button").click();
+    } else if (key === "=" || key === "Enter") {
+        document.querySelector("#eq-button").click();
+    } else if (key === ".") {
+        document.querySelector("#dot-button").click();
+    } else if (key === "%") {
+        document.querySelector("#per-button").click();
+    } else if (key === "Escape") {
+        document.querySelector("#ac-button").click();
+    } else if (key === "Backspace") {
+        document.querySelector("#del-button").click();
+    } 
 })
