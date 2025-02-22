@@ -34,6 +34,7 @@ let isScreenCleared = false;
 let isEqualClicked = false;    
 
 let snarkyMessage = "go back to skool";
+let dotButton = document.querySelector("#dot-button");
 
 function display(text){
     let num = document.createElement("span");
@@ -71,6 +72,9 @@ numButtonContainer.forEach(button => button.addEventListener("click", () => {
     } 
     let numText = button.textContent
     display(numText);
+    if(getCurrentDisplay().includes(".")) {
+        dotButton.disabled = true;
+    }
 }))
 
 let opButtonContainer = Array.from(document.querySelectorAll(".op-buttons"));
@@ -79,7 +83,7 @@ opButtonContainer.forEach(button => button.addEventListener("click", () => {
     if(curDisplay === "Error" || curDisplay === '' || curDisplay === snarkyMessage) {
         screen.replaceChildren();
         display(0);
-    } else if (b === "0") {
+    } else if (b === "0" || a === "0" && b === "0") {
         handleSnarkyMessage();
         return;
     }
@@ -88,7 +92,7 @@ opButtonContainer.forEach(button => button.addEventListener("click", () => {
         isEqualClicked = false; 
     }
     ans = operate(+a, +b, operator);
-    if(ans != undefined) {
+    if(ans !== undefined && !isNaN(ans) && b !== '') {
         a = ans;
         screen.replaceChildren();
         display(ans);
@@ -96,12 +100,14 @@ opButtonContainer.forEach(button => button.addEventListener("click", () => {
     b = '';
     isOperatorClicked = true;
     isScreenCleared = false;
+    dotButton.disabled = false;
     operator = button.textContent;
 }))
 
 let eqButton = document.querySelector("#eq-button");
 eqButton.addEventListener("click", () => {
     if(a === '' && b === '') {
+        acButton.click();
         return;
     }
 
@@ -111,7 +117,7 @@ eqButton.addEventListener("click", () => {
     if(!isOperatorClicked) {
         display(a);
         ans = a;
-    } else if (b === "0") {
+    } else if (b === "0" || a === "0" && b === "0") {
         handleSnarkyMessage();
     } else if (isNaN(ans) || ans === undefined || b === '') {
         acButton.click();
@@ -124,6 +130,7 @@ eqButton.addEventListener("click", () => {
     isOperatorClicked = false;
     isScreenCleared = false;
     isEqualClicked = true;
+    dotButton.disabled = false;
     a = '';
     b = '';
     operator = '';
@@ -141,6 +148,7 @@ acButton.addEventListener("click", () => {
     isOperatorClicked = false;
     isScreenCleared = false;
     isEqualClicked = false; 
+    dotButton.disabled = false;
     a = '';
     b = '';
     operator = '';
@@ -160,6 +168,9 @@ delButton.addEventListener("click", () => {
             screen.lastChild.remove();
             b = getCurrentDisplay();
         }
+    }
+    if(!getCurrentDisplay().includes(".")) {
+        dotButton.disabled = false;
     }
 })
 
