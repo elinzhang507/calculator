@@ -27,13 +27,15 @@ function divide(a, b){
 }
 
 const screen = document.querySelector("#screen-container");
-displayNum(0);
+display(0);
 
 let isOperatorClicked = false;
 let isScreenCleared = false;
 let isEqualClicked = false;    
 
-function displayNum(text){
+let snarkyMessage = "go back to skool";
+
+function display(text){
     let num = document.createElement("span");
     num.textContent = text;
     screen.appendChild(num);
@@ -44,6 +46,15 @@ function getCurrentDisplay(){
     let curArr = Array.from(document.querySelectorAll("span"));
     curArr.forEach(i => cur += i.textContent); 
     return cur; 
+}
+
+function handleSnarkyMessage() {
+    screen.replaceChildren();
+    display(snarkyMessage);
+    let buttonContainer = Array.from(document.querySelectorAll("button"));
+    buttonContainer.forEach(button => button.disabled = true);
+    acButton.disabled = false;
+    acButton.textContent = "OK";
 }
 
 let numButtonContainer = Array.from(document.querySelectorAll(".num-buttons"));
@@ -59,27 +70,28 @@ numButtonContainer.forEach(button => button.addEventListener("click", () => {
         a += button.textContent
     } 
     let numText = button.textContent
-    displayNum(numText);
+    display(numText);
 }))
 
 let opButtonContainer = Array.from(document.querySelectorAll(".op-buttons"));
 opButtonContainer.forEach(button => button.addEventListener("click", () => {
-    if(getCurrentDisplay() === "Error") {
+    let curDisplay = getCurrentDisplay();
+    if(curDisplay === "Error" || curDisplay === '' || curDisplay === snarkyMessage) {
         screen.replaceChildren();
-        displayNum(0);
-    } else if (isEqualClicked && ans !== '' && ans !== undefined && !isNaN(+ans)) {
+        display(0);
+    } else if (b === "0") {
+        handleSnarkyMessage();
+        return;
+    }
+    else if (isEqualClicked && ans !== '' && ans !== undefined && !isNaN(+ans)) {
         a = ans;
         isEqualClicked = false; 
-    } else if (b === "0") {
-        acButton.click();
-        screen.replaceChildren();
-        displayNum("Error");
     }
     ans = operate(+a, +b, operator);
     if(ans != undefined) {
         a = ans;
         screen.replaceChildren();
-        displayNum(ans);
+        display(ans);
     } 
     b = '';
     isOperatorClicked = true;
@@ -97,14 +109,16 @@ eqButton.addEventListener("click", () => {
     ans = operate(+a, +b, operator);
 
     if(!isOperatorClicked) {
-        displayNum(a);
+        display(a);
         ans = a;
-    } else if (isNaN(ans) || ans === undefined || !isFinite(ans) || b === '') {
+    } else if (b === "0") {
+        handleSnarkyMessage();
+    } else if (isNaN(ans) || ans === undefined || b === '') {
         acButton.click();
         screen.replaceChildren();
-        displayNum("Error");
+        display("Error");
     } else {
-        displayNum(ans);
+        display(ans);
     }
 
     isOperatorClicked = false;
@@ -117,8 +131,13 @@ eqButton.addEventListener("click", () => {
 
 let acButton = document.querySelector("#ac-button");
 acButton.addEventListener("click", () => {
+    if(getCurrentDisplay() === snarkyMessage) {
+        let buttonContainer = Array.from(document.querySelectorAll("button"));
+        buttonContainer.forEach(button => button.disabled = false);
+        acButton.textContent = "AC";
+    }
     screen.replaceChildren();
-    displayNum(0);
+    display(0);
     isOperatorClicked = false;
     isScreenCleared = false;
     isEqualClicked = false; 
@@ -130,13 +149,17 @@ acButton.addEventListener("click", () => {
 
 let delButton = document.querySelector("#del-button");
 delButton.addEventListener("click", () => {
-    let curDisplay = getCurrentDisplay();
-    if(curDisplay === "Error") {
+    if(getCurrentDisplay() === "Error" || getCurrentDisplay() === snarkyMessage) {
         return;
     }
     if(screen.lastChild) {
-        screen.lastChild.remove();
-        
+        if(b === '' && ans === '') {
+            screen.lastChild.remove();
+            a = getCurrentDisplay();
+        } else if (b !== ''){
+            screen.lastChild.remove();
+            b = getCurrentDisplay();
+        }
     }
 })
 
@@ -145,15 +168,15 @@ ansButton.addEventListener("click", () => {
     let num = getCurrentDisplay();
     let percentNum = +num/100;
 
-    if(b === '' && isOperatorClicked || getCurrentDisplay() === "Error") {
+    if(b === '' && isOperatorClicked || getCurrentDisplay() === "Error" || getCurrentDisplay() === snarkyMessage) {
         acButton.click();
         screen.replaceChildren();
-        displayNum("Error");
+        display("Error");
         return;
     }
 
     screen.replaceChildren();
-    displayNum(percentNum);
+    display(percentNum);
     if(+num === +a) {
         a = percentNum;
     } else if (+num === +b) {
