@@ -60,6 +60,10 @@
 
 #eq-button {
     flex: 2 2 calc(50% - 15px);
-    /* background-color: rgb(21, 179, 147); */
     background-image: linear-gradient(to bottom right, rgb(21, 179, 147), rgb(25, 134, 153));
 }
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
