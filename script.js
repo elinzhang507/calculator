@@ -202,9 +202,7 @@ ansButton.addEventListener("click", () => {
 
 document.addEventListener("keydown", (event) => {
     let key = event.key;
-    let code = event.code;
     if(isFinite(key)){
-        console.log(`num-${key}`)
         document.querySelector(`#num-${key}`).click();
     } else if (key === "+") {
         document.querySelector("#add").click();
@@ -214,8 +212,6 @@ document.addEventListener("keydown", (event) => {
         document.querySelector("#multiply").click();
     } else if (key === "/") {
         document.querySelector("#divide").click();
-    } else if (key === "=" || key === "Enter") {
-        document.querySelector("#eq-button").click();
     } else if (key === "=" || key === "Enter") {
         document.querySelector("#eq-button").click();
     } else if (key === ".") {
