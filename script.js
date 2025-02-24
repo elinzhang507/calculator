@@ -35,6 +35,7 @@ let isEqualClicked = false;
 
 let snarkyMessage = "go back to skool";
 let dotButton = document.querySelector("#dot-button");
+let buttonContainer = Array.from(document.querySelectorAll("button"));
 
 function display(text){
     let num = document.createElement("span");
@@ -52,7 +53,7 @@ function getCurrentDisplay(){
 function handleSnarkyMessage() {
     screen.replaceChildren();
     display(snarkyMessage);
-    let buttonContainer = Array.from(document.querySelectorAll("button"));
+    buttonContainer = Array.from(document.querySelectorAll("button"));
     buttonContainer.forEach(button => button.disabled = true);
     acButton.disabled = false;
     acButton.textContent = "OK";
@@ -202,25 +203,63 @@ ansButton.addEventListener("click", () => {
 
 document.addEventListener("keydown", (event) => {
     let key = event.key;
-    if(isFinite(key)){
-        document.querySelector(`#num-${key}`).click();
+    let button;
+
+    if (isFinite(key)) {
+        button = document.querySelector(`#num-${key}`);
     } else if (key === "+") {
-        document.querySelector("#add").click();
+        button = document.querySelector("#add");
     } else if (key === "-") {
-        document.querySelector("#subtract").click();
+        button = document.querySelector("#subtract");
     } else if (key === "*") {
-        document.querySelector("#multiply").click();
+        button = document.querySelector("#multiply");
     } else if (key === "/") {
-        document.querySelector("#divide").click();
+        button = document.querySelector("#divide");
     } else if (key === "=" || key === "Enter") {
-        document.querySelector("#eq-button").click();
+        button = document.querySelector("#eq-button");
     } else if (key === ".") {
-        document.querySelector("#dot-button").click();
+        button = document.querySelector("#dot-button");
     } else if (key === "%") {
-        document.querySelector("#per-button").click();
+        button = document.querySelector("#per-button");
     } else if (key === "Escape") {
-        document.querySelector("#ac-button").click();
+        button = document.querySelector("#ac-button");
     } else if (key === "Backspace") {
-        document.querySelector("#del-button").click();
-    } 
-})
+        button = document.querySelector("#del-button");
+    }
+
+    if (button) {
+        button.classList.add("active"); 
+        button.click(); 
+    }
+});
+
+document.addEventListener("keyup", (event) => {
+    let key = event.key;
+    let button;
+
+    if (isFinite(key)) {
+        button = document.querySelector(`#num-${key}`);
+    } else if (key === "+") {
+        button = document.querySelector("#add");
+    } else if (key === "-") {
+        button = document.querySelector("#subtract");
+    } else if (key === "*") {
+        button = document.querySelector("#multiply");
+    } else if (key === "/") {
+        button = document.querySelector("#divide");
+    } else if (key === "=" || key === "Enter") {
+        button = document.querySelector("#eq-button");
+    } else if (key === ".") {
+        button = document.querySelector("#dot-button");
+    } else if (key === "%") {
+        button = document.querySelector("#per-button");
+    } else if (key === "Escape") {
+        button = document.querySelector("#ac-button");
+    } else if (key === "Backspace") {
+        button = document.querySelector("#del-button");
+    }
+
+    if (button) {
+        button.classList.remove("active");
+    }
+});

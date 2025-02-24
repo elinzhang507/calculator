@@ -50,20 +50,49 @@
     background-color: rgb(60, 60, 60);
     border-radius: 10px;
 }
+
+#button-container > *:hover {
+    background-color: rgb(80, 80, 80);
+}
+
 #button-container > .misc-buttons {
     background-color: rgb(185, 59, 59);
 }
 
+#button-container > .misc-buttons:hover {
+    background-color: rgb(220, 80, 80);
+}
+
 #button-container > .op-buttons, #button-container > #per-button {
-    background-color: rgb(37, 61, 77);
+    background-color: rgb(47, 91, 121);
+}
+
+#button-container > .op-buttons:hover, #button-container > #per-button:hover {
+    background-color: rgb(67, 111, 141);
 }
 
 #eq-button {
     flex: 2 2 calc(50% - 15px);
-    background-image: linear-gradient(to bottom right, rgb(21, 179, 147), rgb(25, 134, 153));
+    background-color: rgb(19, 171, 141);
+}
+
+#eq-button:hover {
+    background-color: rgb(25, 200, 165);
+}
+
+#button-container button:active,
+#button-container > .misc-buttons:active,
+#button-container > .op-buttons:active,
+#button-container > #per-button:active,
+#button-container button.active,
+#button-container > .misc-buttons.active,
+#button-container > .op-buttons.active,
+#button-container > #per-button.active
+{
+    transform: scale(0.9);
 }
 
 button:disabled {
     opacity: 0.6;
-    cursor: not-allowed;
-  }
+    pointer-events: none;
+}
