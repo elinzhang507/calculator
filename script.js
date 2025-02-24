@@ -27,6 +27,8 @@ function divide(a, b){
 }
 
 const screen = document.querySelector("#screen-container");
+
+let maxDisplayWidth = screen.clientWidth - 10;
 display(0);
 
 let isOperatorClicked = false;
@@ -38,6 +40,9 @@ let dotButton = document.querySelector("#dot-button");
 let buttonContainer = Array.from(document.querySelectorAll("button"));
 
 function display(text){
+    if(!isNaN(text)){
+        text = parseFloat(parseFloat(text).toFixed(12));
+    }
     let num = document.createElement("span");
     num.textContent = text;
     screen.appendChild(num);
@@ -48,6 +53,13 @@ function getCurrentDisplay(){
     let curArr = Array.from(document.querySelectorAll("span"));
     curArr.forEach(i => cur += i.textContent); 
     return cur; 
+}
+
+function getDisplayWidth(){
+    let width = 0;
+    let widthArr = Array.from(document.querySelectorAll("span"));
+    widthArr.forEach(i => width += i.clientWidth); 
+    return width; 
 }
 
 function handleSnarkyMessage() {
@@ -61,18 +73,22 @@ function handleSnarkyMessage() {
 
 let numButtonContainer = Array.from(document.querySelectorAll(".num-buttons"));
 numButtonContainer.forEach(button => button.addEventListener("click", () => {
-    isEqualClicked = false;
     if(!isScreenCleared) {
         screen.replaceChildren()
         isScreenCleared = true;
+    }
+    isEqualClicked = false;
+    let numText = button.textContent
+    display(numText);
+    if(getDisplayWidth() >= maxDisplayWidth) {
+        screen.removeChild(screen.lastElementChild);
+        return;
     }
     if(isOperatorClicked) {
         b += button.textContent
     } else {
         a += button.textContent
     } 
-    let numText = button.textContent
-    display(numText);
     if(getCurrentDisplay().includes(".")) {
         dotButton.disabled = true;
     }
@@ -178,8 +194,8 @@ delButton.addEventListener("click", () => {
     }
 })
 
-let ansButton = document.querySelector("#per-button");
-ansButton.addEventListener("click", () => {
+let perButton = document.querySelector("#per-button");
+perButton.addEventListener("click", () => {
     let num = getCurrentDisplay();
     let percentNum = +num/100;
 
